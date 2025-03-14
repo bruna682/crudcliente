@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Lista de Clientes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Gênero</th>
+                <th>Data de Nascimento</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>Status</th>
+                <th>Ranking</th>
+            </tr>
+        </thead>
+        <tbody id="clientes-tbody">
+            
+        </tbody>
+    </table>
+
+    <script>
+        
+        function carregarClientes() {
+            fetch("http://localhost:8080/TesteCrud5/ClienteServlet")
+                .then(response => response.json()) 
+                .then(clientes => {
+                    let tbody = document.getElementById("clientes-tbody");
+                    tbody.innerHTML = ""; 
+
+                    clientes.forEach(cliente => {
+                        let row = `<tr>
+                            <td>${cliente.cliId}</td>
+                            <td>${cliente.cliNome}</td>
+                            <td>${cliente.cliEmail}</td>
+                            <td>${cliente.cliGenero || '-'}</td>
+                            <td>${cliente.cliDataNascimento || '-'}</td>
+                            <td>${cliente.cpf}</td>
+                            <td>${cliente.cliTelefoneTipo} (${cliente.cliTelefoneDdd}) ${cliente.cliTelefoneNumero}</td>
+                            <td>${cliente.cliStatus}</td>
+                            <td>${cliente.cliRanking}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Erro ao buscar clientes:", error));
+        }
+
+        window.onload = carregarClientes;
+    </script>
+
+</body>
+</html>
